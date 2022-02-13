@@ -1,2 +1,2 @@
-bot: npm run start:frontend
-bot: npm run start:backend
+web: npm run start:frontend
+web: npm run start:backend
