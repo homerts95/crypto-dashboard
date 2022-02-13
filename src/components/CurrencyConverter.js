@@ -7,27 +7,37 @@ const CurrencyConverter = () => {
     const [chosenPrimaryCurrency, setChosenPrimaryCurrency] = useState('BTC')
     const [chosenSecondaryCurrency, setChosenSecondaryCurrency] = useState('BTC')
     const [amount, setAmount] = useState(1)
-    const [exchangeRate,setExchangeRate] = useState(0)
-    console.log(amount)
+    const [result, setResult] = useState(0)
+    const[exchangedData,setExchangedData] = useState({
+        exchangeRate: '0',
+        primaryCurrency: 'BTC',
+        secondaryCurrency:'BTC'
+    })
+    console.log(exchangedData)
     const convert = () => {
-
-
         const options = {
             method: 'GET',
-            url: 'https://alpha-vantage.p.rapidapi.com/query',
+            url: 'http://localhost:8000/convert',
             params: {from_currency: chosenPrimaryCurrency, function: 'CURRENCY_EXCHANGE_RATE', to_currency: chosenSecondaryCurrency},
-            headers: {
-                'x-rapidapi-host': 'alpha-vantage.p.rapidapi.com',
-                'x-rapidapi-key': 'b83997c68bmsh2562d5339d428d4p1d67fajsn00bba3400164'
-            }
+
         }
 
         axios.request(options).then( (response) => {
-            console.log(response.data['realtime']);
+             console.log(response.data)
+            setResult(response.data * amount)
+
+            setExchangedData ({
+                exchangeRate: (response.data),
+                primaryCurrency: chosenPrimaryCurrency,
+                secondaryCurrency: chosenSecondaryCurrency
+            })
+
+
         }).catch( (error) => {
             console.error(error);
         })
     }
+    console.log(ExchangeRate)
     return (
         <div className="currency-converter">
             <h2>CurrencyConverter</h2>
@@ -61,7 +71,8 @@ const CurrencyConverter = () => {
                         <td>
                             <input type="number"
                                    name="currency-amount-2"
-                                   value={""}
+                                   value={result}
+                                   disabled={true}
                             />
                         </td>
                         <td>
@@ -80,7 +91,10 @@ const CurrencyConverter = () => {
                 <button id="convert-button" onClick={convert}>Convert</button>
 
             </div>
-            <ExchangeRate/>
+
+            <ExchangeRate
+                exchangedData={exchangedData}
+            />
         </div>
     )
 }
