@@ -1,0 +1,2 @@
+bot: npm run start:frontend
+bot: npm run start:backend
